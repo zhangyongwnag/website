@@ -5,8 +5,8 @@ export default {
   state: {
     control: true, // 侧边栏展开状态
     route_current: {}, // 当前的路由信息
-    convert_header_active_index: 1, // 转换页当前Tab选择项index，默认第一项
-    convert_header_active_name: 'basicConvert', // 转换页当前Tab选择项名称，默认第一项
+    convert_header_active_index: 0, // 转换页当前Tab选择项index，默认第一项
+    convert_header_active_name: 'myConvert', // 转换页当前Tab选择项名称，默认第一项
   },
   getters: {},
   mutations: {},
@@ -21,11 +21,11 @@ export default {
     },
     // 更新转换页面当前选中的Tab信息
     update_convert_header_active({state}, data) {
-      // 如果未登录，不允许进入我的转换
-      if (data.tab.id === 1 && !store.state.convert.convert_user_info.uflag){
-        store.dispatch('update_login_model_status', true)
-        return
-      }
+      // // 如果未登录，不允许进入我的转换
+      // if (data.tab.id === 1 && !store.state.convert.convert_user_info.uflag){
+      //   store.dispatch('update_login_model_status', true)
+      //   return
+      // }
       state.convert_header_active_index = data.index
       state.convert_header_active_name = data.tab.component_name
     },

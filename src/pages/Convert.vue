@@ -51,14 +51,14 @@
       }
     },
     created() {
-      // 设置Tab，默认常用转换
-      this.$store.dispatch('update_convert_header_active', {
-        tab: {
-          id: this.$route.params.tab && this.$route.params.tab.id || 2,
-          component_name: this.$route.params.tab && this.$route.params.tab.component_name || 'basicConvert'
-        },
-        index: this.$route.params.index || 1
-      })
+      // // 设置Tab，默认常用转换
+      // this.$store.dispatch('update_convert_header_active', {
+      //   tab: {
+      //     id: this.$route.params.tab && this.$route.params.tab.id || 2,
+      //     component_name: this.$route.params.tab && this.$route.params.tab.component_name || 'basicConvert'
+      //   },
+      //   index: this.$route.params.index || 1
+      // })
       // 获取用户转换信息
       this.$store.dispatch('get_convert_info')
     },

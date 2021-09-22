@@ -31,8 +31,8 @@
       <div class="setting_item" :class="{'setting_item_active': editor_user_name}" style="margin-top: 0">
         <div class="setting_toolbar _flex_between_center">
           <div class="_flex_column_align_start">
-            <h1>用户昵称</h1>
-            <span>{{user_info.user_name}}</span>
+            <h1>个人姓名</h1>
+            <span>{{userInfo.user_name}}</span>
           </div>
           <div class="collapse _flex_center" @click="editor_user_name = !editor_user_name">编辑</div>
         </div>
@@ -111,10 +111,7 @@
             <h1>绑定邮箱</h1>
             <span>{{user_info.user_email || '未绑定'}}</span>
           </div>
-          <div class="collapse _flex_center" @click="verify_email" v-if="userInfo.channel">编辑</div>
-          <el-tooltip v-else class="item" effect="dark" content="邮箱登录用户暂不支持修改 Email" placement="left">
-            <div class="collapse _flex_center" style="color: #999;cursor: not-allowed">编辑</div>
-          </el-tooltip>
+          <div class="collapse _flex_center" @click="verify_email">编辑</div>
         </div>
         <div class="collapse_content" :style="editor_email ? { height: '132px' } : { height: 0 }">
           <div class="common_input">
@@ -156,7 +153,7 @@
     data() {
       return {
         common,
-        userInfo: {}, // 用户信息
+        userInfo: JSON.parse(localStorage.getItem('userInfo') || '{}'), // 用户信息
         editor: false, // 整体编辑状态
         url: avatar, // 用户默认头像
         editor_user_name: false, // 用户名称编辑
@@ -195,28 +192,16 @@
        * @param {String} file: 图片
        */
       handle_change_avatar(file) {
-        // 创建oss对象
-        let oss = new OSS(file)
-        this.$nextTick(() => {
-          oss.put()
-            .then(res => {
-              // 设置头像url
-              this.userInfo.user_headpic = res.url
-              // 更新用户信息
-              this._updateUserInfo(true)
-              this.$message.success(`用户头像已更换成功`)
-            })
-            .catch(_ => {
-
-            })
-        })
+        this.userInfo.user_headpic = file
+        // 更新用户信息
+        this._updateUserInfo(true)
       },
       /**
        * @description 修改用户名称
        */
       update_user_name() {
         if (!this.userInfo.user_name) {
-          this.$message.error(`请输入用户名称`)
+          this.$message.error(`请输入个人姓名`)
           return
         }
         if (this.userInfo.user_name === this.user_info.user_name) {
@@ -225,28 +210,8 @@
         }
         // 更新用户信息
         this._updateUserInfo(true)
-        this.$message.success(`用户名称已更换成功`)
+        this.$message.success(`个人姓名已更换成功`)
         this.editor_user_name = false
-      },
-      /**
-       * @description 修改用户密码
-       */
-      update_password() {
-        let { password, confirm_password } = this.form
-        if (!password) {
-          this.$message.error(`请输入用户密码`)
-          return
-        }
-        if (password !== confirm_password) {
-          this.$message.error(`俩次密码输入不一致`)
-          return
-        }
-        // 更新用户信息
-        // this._updateUserInfo()
-        this.$message.success(`用户密码已更换成功`)
-        this.editor_password = false
-        this.form.password = ''
-        this.form.confirm_password = ''
       },
       /**
        * @description 校验手机号
@@ -406,18 +371,7 @@
        * @description 获取用户信息
        */
       _getUserInfo() {
-        // 未登录不显示个人设置
-        if (!this.user_info.uflag) return
-        this.http.get(config.GET_USER_INFO)
-          .then(res => {
-            if (res.data) {
-              this.userInfo = res.data
-              this.userInfo.user_name = this.userInfo.user_name || 'User'
-            }
-          })
-          .catch(err => {
 
-          })
       },
       /**
        * @description 更新用户信息
@@ -428,18 +382,18 @@
         let obj = Object.assign(this.user_info, this.userInfo)
         localStorage.setItem('userInfo', JSON.stringify(obj))
         this.$store.commit('update_user_info', obj)
-        if (!status) return
-        let data = {
-          user_name,
-          user_headpic,
-        }
-        this.http.post(config.UPDATE_USER_INFO, data)
-          .then(res => {
-
-          })
-          .catch(err => {
-
-          })
+        // if (!status) return
+        // let data = {
+        //   user_name,
+        //   user_headpic,
+        // }
+        // this.http.post(config.UPDATE_USER_INFO, data)
+        //   .then(res => {
+        //
+        //   })
+        //   .catch(err => {
+        //
+        //   })
       }
     },
     components: {

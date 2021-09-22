@@ -1,30 +1,45 @@
 <template>
   <div class="container">
-    <nav>
-      <div class="nav_item _flex_item_center" :class="nav.id == tab_active_info.id ? 'nav_item_active' : ''" v-for="(nav,index) in nav"
-           @click="handle_change(nav,index)">
-        <img :src="nav.id === tab_active_info.id ? nav.url_select : nav.url" alt="">
-        {{nav.label}}
+    <header class="_flex_between_center">
+      <div class="_flex_item_center">
+        <img src="../../../assets/img/position.png" alt="">
+        位置：湖北省 武汉市
       </div>
+      <div class="date">出生日期：2021.12.12</div>
+    </header>
+    <section class="_flex_column_center">
+      <div class="user_avatar _flex_center">
+        <img :src="user_info.user_headpic" alt="">
+      </div>
+      <h1 class="_flex_center">
+        {{user_info.user_name}}
+        <img src="../../../assets/img/gril.png" alt="">
+      </h1>
+      <div class="description">
+        1363944092@qq.com<span>|</span>武汉传媒学院
+      </div>
+      <div class="tabs">
+        <div class="tab" v-for="(item, index) in tabs">{{item }}</div>
+      </div>
+    </section>
+    <nav>
+      <el-tabs v-model="label">
+        <el-tab-pane label="个人信息" name="first"></el-tab-pane>
+        <el-tab-pane label="个人简介" name="second"></el-tab-pane>
+        <el-tab-pane label="技能特长" name="third"></el-tab-pane>
+        <el-tab-pane label="兴趣爱好" name="fourth"></el-tab-pane>
+        <el-tab-pane label="个人荣誉" name="five"></el-tab-pane>
+        <el-tab-pane label="个人作品" name="six"></el-tab-pane>
+      </el-tabs>
     </nav>
-
-    <!--动态组件-->
-    <component :is="component_name" style="animation: fade-bottom .5s 0s;"></component>
+    <div class="tab_content">
+      123
+    </div>
   </div>
 </template>
 
 <script>
   import {mapState} from 'vuex'
-  import join from '../../../assets/img/convert/join.png'
-  import vip from '../../../assets/img/convert/vip.png'
-  import record from '../../../assets/img/convert/record.png'
-  import group from '../../../assets/img/convert/group.png'
-  import convertion from '../../../assets/img/convert/convertion.png'
-  import join_select from '../../../assets/img/convert/join_select.png'
-  import vip_select from '../../../assets/img/convert/vip_select.png'
-  import record_select from '../../../assets/img/convert/record_select.png'
-  import group_select from '../../../assets/img/convert/group_select.png'
-  import convertion_select from '../../../assets/img/convert/convertion_select.png'
 
   export default {
     data() {
@@ -38,18 +53,16 @@
           //   url_select: join_select
           // },
           {
-            label: '我的VIP',
+            label: '基本信息',
             id: 2,
             component_name: 'vip',
-            url: vip,
-            url_select: vip_select
+            url_select: 'el-icon-s-custom'
           },
           {
-            label: '购买记录',
+            label: '技能特长',
             id: 3,
             component_name: 'record',
-            url: record,
-            url_select: record_select
+            url_select: 'el-icon-s-custom'
           },
           // {
           //   label: '多人共享',
@@ -59,14 +72,15 @@
           //   url_select: group_select
           // },
           {
-            label: '转换记录',
+            label: '个人荣誉',
             id: 5,
             component_name: 'convertion',
-            url: convertion,
-            url_select: convertion_select
-          }
+            url_select: 'el-icon-s-custom'
+          },
         ],
         component_name: '', // 动态组件
+        tabs: ['夜猫子', '逛街达人', '选择恐惧症', '古筝狂魔', '逗比控'],
+        label: 'first'
       }
     },
     watch: {
@@ -80,8 +94,8 @@
     },
     computed: {
       ...mapState({
-        tab_active_info: state => state.myConvert.tab_active_info
-      })
+        user_info: state => state.login.user_info
+      }),
     },
     created() {
       this.$store.dispatch('update_active_tab_info', this.nav[0])
@@ -101,49 +115,171 @@
 </script>
 
 <style lang="less" scoped>
+  /deep/ .el-tabs__nav-wrap {
+    .el-tabs__nav-scroll {
+      padding: 7px 0 0 26px;
+      display: flex;
+      justify-content: center;
+
+      .el-tabs__nav {
+        .el-tabs__active-bar {
+          background-color: #2E5A9D;
+          border-radius: 2px;
+          height: 2px;
+          width: 30px !important;
+          margin-left: 18px;
+        }
+
+        .el-tabs__item {
+          font-size: 16px;
+          font-weight: bold;
+          height: 42px;
+          line-height: 42px;
+          padding: 0 40px;
+        }
+
+        .el-tabs__item.is-active {
+          color: #2E5A9D;
+        }
+
+        .el-tabs__item:hover {
+          color: #2E5A9D;
+        }
+      }
+    }
+
+    &:after {
+      height: 1px;
+      background-color: rgba(151, 151, 151, 0.2);
+    }
+  }
+
+  /deep/ .el-tabs__header {
+    margin: 0;
+  }
+
+  /deep/ .el-tabs__content {
+    padding: 0;
+    height: calc(100% - 58px);
+  }
   .container {
-    display: flex;
     width: 100%;
     height: 100%;
-    padding: 25px 40px 29px;
+    animation: fade-bottom .5s 0s;
 
-    nav {
-      width: 326px;
-      min-width: 326px;
-      height: 100%;
-      padding: 20px;
-      background: #FFFFFF;
-      box-shadow: 0px 2px 8px 1px rgba(0, 0, 0, 0.1);
-      border-radius: 20px;
+    header {
+      width: 100%;
+      height: 80px;
+      padding: 0 42px 0 32px;
 
-      .nav_item {
-        width: 100%;
-        height: 42px;
-        line-height: 42px;
-        border-radius: 24px;
-        color: #333;
-        margin-bottom: 10px;
-        cursor: pointer;
-        transition: all .3s;
-        padding-left: 30px;
-        letter-spacing: 1px;
-        text-shadow: 0.5px 0 0.5px #999;
+      .date {
+        font-size: 18px;
+        color: #999;
+      }
+    }
+
+    section {
+      width: 100%;
+      height: 269.2px;
+      background-color: #fff;
+      position: relative;
+      justify-content: flex-start;
+
+      .user_avatar {
+        position: absolute;
+        left: 50%;
+        top: -65px;
+        transform: translateX(-50%);
+        width: 130px;
+        height: 130px;
+        border-radius: 50%;
+        border: 10px #fff solid;
+        overflow: hidden;
 
         img {
-          width: 17px;
-          margin-right: 14px;
+          width: 105%;
+        }
+
+        &:before {
+          content: '';
+          position: absolute;
         }
       }
 
-      .nav_item:hover {
-        background-color: rgba(17, 101, 214, 0.1);
+      h1 {
+        font-size: 24px;
+        margin-top: 72px;
+        font-weight: normal;
+        text-shadow: 0.5px 0 0.5px #999;
+
+        img {
+          width: 24px;
+          margin-left: 12px;
+        }
       }
 
-      .nav_item_active {
-        background-color: rgba(17, 101, 214, 0.1);
-        color: #1165D6;
-        text-shadow: 0.5px 0 0px #1165D6;
+      .description {
+        margin-top: 17px;
+        font-size: 18px;
+        color: #999;
+
+        span {
+          margin: -5px 12px 0;
+          font-size: 20px;
+        }
       }
+
+      .tabs {
+        margin-top: 26px;
+        display: flex;
+
+        .tab {
+          padding: 5px 30px;
+          border-radius: 24px;
+          background-color: rgba(213, 223, 247, 0.7);
+          color: dodgerblue;
+          font-size: 14px;
+          margin-right: 20px;
+          text-align: center;
+          line-height: 20px;
+          /*box-shadow: 0 0 10px 2px #eee*/
+          box-shadow: 0 0 10px 1px rgba(0,0,0,0.1);
+          cursor: pointer;
+          animation: tab_show 1s .3s forwards;
+          transition: all .3s;
+          opacity: 0;
+
+          &:hover {
+            transform: scale(1.1);
+          }
+        }
+      }
+    }
+
+    nav {
+      margin-top: -50px;
+      opacity: 0;
+      animation: section_show 1s 1s forwards;
+    }
+  }
+
+  @keyframes tab_show {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes section_show {
+    from {
+      opacity: 0;
+      transform: translateY(-50px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
     }
   }
 </style>

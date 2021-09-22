@@ -210,7 +210,21 @@ module.exports = {
             publicPath: '../'
           }
         }
-      }
+      },
+      // 处理cur文件
+      {
+        test: /\.(cur)(\?.*)?$/,
+        use: {
+          loader: 'url-loader',
+          options: {
+            esModule: false, // 设为false，否则图片编译为 [object Module]
+            limit: 10240, // 超过10k
+            // name: 'image/[name].[hash:7].[ext]',
+            name: 'cur/[name].[ext]',
+            // outputPath: 'image'
+          }
+        }
+      },
     ]
   },
   plugins: [

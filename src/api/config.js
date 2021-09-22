@@ -4,9 +4,12 @@ let host_convert = ''
 
 // 环境判断
 if (process.env.NODE_TYPE === 'development') {
-  host = 'https://rd.pc.api.speedoffice.cn'
-  host_pay = 'https://rd.pc.pay.speedoffice.cn'
-  host_convert = 'https://rd.pc.convert.speedoffice.cn'
+  // host = 'https://rd.pc.api.speedoffice.cn'
+  // host_pay = 'https://rd.pc.pay.speedoffice.cn'
+  // host_convert = 'https://rd.pc.convert.speedoffice.cn'
+  host = 'https://pc.api.speedoffice.cn'
+  host_pay = 'https://pc.pay.speedoffice.cn'
+  host_convert = 'https://pc.convert.speedoffice.cn'
 } else {
   host = 'https://pc.api.speedoffice.cn'
   host_pay = 'https://pc.pay.speedoffice.cn'

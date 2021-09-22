@@ -36,7 +36,7 @@ export default [
       {
         path: '/index',
         name: 'index',
-        component: Index,
+        component: Convert,
         meta: {
           title: '首页',
           active: '#4F32A3',
@@ -51,7 +51,6 @@ export default [
     },
     component: Main,
     children: [
-
       {
         path: '/convert',
         name: 'convert',

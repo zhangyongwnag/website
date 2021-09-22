@@ -5,7 +5,7 @@
       <div v-if="!tab.hidden" :ref="`tab${index}`" class="nav_item _flex_center" v-for="(tab,index) in tabs"
            @click="handle_change(tab,index)">{{tab.name}}
       </div>
-      <div v-if="convert_header_active_index < 6" class="nav_active_line" :style="{left: tab_translate}"
+      <div v-if="convert_header_active_index < 3" class="nav_active_line" :style="{left: tab_translate}"
            ref="line"></div>
     </nav>
     <!--搜索框、会员中心按钮-->
@@ -17,7 +17,7 @@
             v-model.trim="value"
             type="text"
             :fetch-suggestions="querySearch"
-            placeholder="任何搜索"
+            placeholder="输入搜索内容"
             @select="handleSelect"
             highlight-first-item
             :debounce="0"
@@ -33,7 +33,7 @@
         </el-autocomplete>
       </div>
       <div class="user _flex_center" v-active @click="handleSelect(search_list[0])">
-        会员中心
+        个人中心
       </div>
     </section>
   </header>
@@ -49,40 +49,45 @@
         tabs: [
           {
             id: 1,
-            name: '我的转换',
+            name: '个人简介',
             component_name: 'myConvert'
           },
-          {
-            id: 2,
-            name: '常用转换',
-            component_name: 'basicConvert'
-          },
-          {
-            id: 3,
-            name: 'PDF转换',
-            component_name: 'pdfConvert'
-          },
-          {
-            id: 4,
-            name: 'Office转换',
-            component_name: 'officeConvert'
-          },
-          {
-            id: 5,
-            name: '压缩',
-            component_name: 'compress'
-          },
+          // {
+          //   id: 2,
+          //   name: '常用转换',
+          //   component_name: 'basicConvert'
+          // },
+          // {
+          //   id: 3,
+          //   name: 'PDF转换',
+          //   component_name: 'pdfConvert'
+          // },
+          // {
+          //   id: 4,
+          //   name: 'Office转换',
+          //   component_name: 'officeConvert'
+          // },
+          // {
+          //   id: 5,
+          //   name: '压缩',
+          //   component_name: 'compress'
+          // },
           {
             id: 6,
-            name: '所有工具',
+            name: '在线工具',
             component_name: 'all'
           },
           {
             id: 7,
+            name: '留言板',
+            component_name: 'message',
+          },
+          {
+            id: 8,
             name: '转换详细页面',
             component_name: 'index',
             hidden: true
-          }
+          },
         ],
         value: '', // 搜索值
         number: 10, // 随机数

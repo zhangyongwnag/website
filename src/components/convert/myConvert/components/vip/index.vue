@@ -1,13 +1,12 @@
 <template>
   <section class="_flex_column_space_between">
-    <header class="_flex_between_center">
-      <div class="_flex_item_center">
-        <h1>{{user_info.user_name || '未登录'}}</h1>
-        <img v-if="vip_info.is_vip == 1" src="../../../../../assets/img/order/single_vip.png" alt="">
-      </div>
-      <div v-if="vip_info.is_vip == 1">有效期至: {{vip_info.expire_time}}</div>
-      <div v-else>您目前还不是VIP</div>
-    </header>
+<!--    <header class="_flex_between_center">-->
+<!--      <div class="_flex_item_center">-->
+<!--        <h1>{{user_info.user_name}}</h1>-->
+<!--        <img src="../../../../../assets/img/gril.png" alt="">-->
+<!--      </div>-->
+<!--      <div>1363944092@qq.com</div>-->
+<!--    </header>-->
     <article class="_common_scroll_wrap" v-loading="loading">
 <!--      <div class="vip">-->
 <!--        <nav class="normal _flex_center" :class="vip_type == 1 ? 'active' : ''" @click="vip_type = 1">-->
@@ -29,17 +28,17 @@
 <!--          </div>-->
 <!--        </nav>-->
 <!--      </div>-->
-      <div class="content _flex_column_center" style="margin-top: 20px">
+<!--      <div class="content _flex_column_center" style="margin-top: 20px">
         <h2>请选择合适您的套餐</h2>
-<!--        <div class="tab">-->
-<!--          <span v-for="(item,index) in vip_use_list" @click="choice_use_type(item,index)">{{item.name}}</span>-->
-<!--          <div class="active" :style="{left:33.3 * (vip_use_value.id - 1) + '%'}">{{vip_use_value.name}}</div>-->
-<!--        </div>-->
+&lt;!&ndash;        <div class="tab">&ndash;&gt;
+&lt;!&ndash;          <span v-for="(item,index) in vip_use_list" @click="choice_use_type(item,index)">{{item.name}}</span>&ndash;&gt;
+&lt;!&ndash;          <div class="active" :style="{left:33.3 * (vip_use_value.id - 1) + '%'}">{{vip_use_value.name}}</div>&ndash;&gt;
+&lt;!&ndash;        </div>&ndash;&gt;
         <div class="tab">
           <span v-for="(item,index) in package_info.list" @click="choice_use_type(item, index)">{{item.use_time}}&nbsp;{{item.time_types}}</span>
           <div class="active" :style="{left:33.3 * package_choice.index + '%'}">{{package_choice.use_time}}&nbsp;{{package_choice.time_types}}</div>
         </div>
-        <!--套餐种类-->
+        &lt;!&ndash;套餐种类&ndash;&gt;
         <div class="list" v-if="vip_use_value.id != 3">
           <div
               :class="{'item_active': package_id == item.id}"
@@ -59,7 +58,7 @@
                 <img v-if="item.popular && package_id !== item.id" src="../../../../../assets/img/order/package_check_default.png" alt="">
           </div>
         </div>
-        <!--        <div class="list" v-if="vip_use_value.id != 3">
+        &lt;!&ndash;        <div class="list" v-if="vip_use_value.id != 3">
                   <div :class="vip_package == 1 ? 'item_active' : ''" class="item _flex_column_center" @click="vip_package = 1">
                     <span class="time">1年</span>
                     <span class="price">￥58</span>
@@ -91,16 +90,24 @@
                     <SpeedButton text="立即购买" radius="5px"
                                  style="width: 80%;background-color: #fff;border: 2px rgba(77, 128, 240, 1) solid;color: rgba(77, 128, 240, 1)"/>
                   </div>
-                </div>-->
-        <!--分销加盟-->
-<!--        <div class="join" v-if="vip_use_value.id == 3">-->
-<!--          <JoinAfter style="padding-right: 40px" :info="{}"/>-->
-<!--        </div>-->
-      </div>
+                </div>&ndash;&gt;
+        &lt;!&ndash;分销加盟&ndash;&gt;
+&lt;!&ndash;        <div class="join" v-if="vip_use_value.id == 3">&ndash;&gt;
+&lt;!&ndash;          <JoinAfter style="padding-right: 40px" :info="{}"/>&ndash;&gt;
+&lt;!&ndash;        </div>&ndash;&gt;
+      </div>-->
+<!--      <el-carousel :interval="4000">-->
+<!--            <el-carousel-item>-->
+<!--              <h3 class="medium"><img src="../../../../../assets/img/banner1.jpg" alt=""></h3>-->
+<!--            </el-carousel-item>-->
+<!--            <el-carousel-item>-->
+<!--              <h3 class="medium"><img src="../../../../../assets/img/banner2.jpg" alt=""></h3>-->
+<!--            </el-carousel-item>-->
+<!--            <el-carousel-item>-->
+<!--              <h3 class="medium"><img src="../../../../../assets/img/banner2.jpg" alt=""></h3>-->
+<!--            </el-carousel-item>-->
+<!--          </el-carousel>-->
     </article>
-
-    <!--支付组件-->
-    <Pay v-if="pay_status" v-model="pay_status"/>
   </section>
 </template>
 
@@ -187,6 +194,37 @@
 </script>
 
 <style lang="less" scoped>
+  /deep/ .el-carousel--horizontal{
+    width: 96%;
+    margin-left: 2%;
+  }
+
+  /deep/ .el-carousel__container{
+    height: 300px;
+  }
+
+  .el-carousel__item h3 {
+    color: #475669;
+    font-size: 14px;
+    opacity: 0.75;
+    line-height: 200px;
+    margin: 0;
+    height: 300px;
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .el-carousel__item:nth-child(2n) {
+    background-color: #99a9bf;
+  }
+
+  .el-carousel__item:nth-child(2n+1) {
+    background-color: #d3dce6;
+  }
+
   section {
     width: 100%;
     height: 100%;
@@ -230,11 +268,10 @@
 
     article {
       width: 100%;
-      height: calc(100vh - 252px);
+      height: calc(100vh - 132px);
       background: #FFFFFF;
       box-shadow: 0px 2px 8px 1px rgba(0, 0, 0, 0.1);
       border-radius: 20px;
-      margin-top: 20px;
       overflow: auto;
 
       .vip {

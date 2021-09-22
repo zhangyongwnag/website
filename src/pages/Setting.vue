@@ -9,32 +9,19 @@
     </nav>
 
     <!--动态组件-->
-<!--    <component :is="component_name" style="animation: fade-bottom .5s 0s;"></component>-->
     <Basic v-if="tab_active_id == 1" />
-    <Backup v-else-if="tab_active_id == 2" />
     <Language v-else-if="tab_active_id == 3" />
-    <Privacy v-else-if="tab_active_id == 4" />
-    <Protocol @change="handle_change({ id: 4 })" v-else-if="tab_active_id == 5" />
   </div>
 </template>
 
 <script>
   import { mapState } from 'vuex'
   import basic from "../components/setting/basic";
-  import backup from "../components/setting/backup";
   import language from "../components/setting/language";
-  import protocoll_component from "../components/setting/protocoll";
-  import privacy_component from "../components/setting/privacy";
   import basic_image from '../assets/img/convert/basice.png'
   import basic_image_select from '../assets/img/convert/basic_select.png'
-  import backup_image from '../assets/img/convert/backup.png'
-  import backup_image_select from '../assets/img/convert/backup_select.png'
   import language_image from '../assets/img/convert/language.png'
   import language_image_select from '../assets/img/convert/language_select.png'
-  import protocol from '../assets/img/convert/protocol.png'
-  import protocol_select from '../assets/img/convert/protocol_select.png'
-  import privacy from "../assets/img/convert/privacy.png";
-  import privacy_select from "../assets/img/convert/privacy_select.png";
 
   export default {
     data() {
@@ -48,29 +35,10 @@
             url_select: basic_image_select
           },
           {
-            label: '备份',
-            id: 2,
-            url: backup_image,
-            url_select: backup_image_select
-          },
-          {
             label: '语言',
             id: 3,
             url: language_image,
             url_select: language_image_select
-          },
-          {
-            label: '隐私政策',
-            id: 4,
-            url: privacy,
-            url_select: privacy_select,
-            size: 15
-          },
-          {
-            label: '用户协议',
-            id: 5,
-            url: protocol,
-            url_select: protocol_select
           },
         ],
         tab_active_id: 1 // 选中的菜单ID
@@ -90,11 +58,11 @@
       }
     },
     mounted() {
-      // 未登录不显示个人设置
-      if (!this.user_info.uflag) {
-        this.tab_active_id = 2
-        this.nav = this.nav.filter(item => item.id != 1)
-      }
+      // // 未登录不显示个人设置
+      // if (!this.user_info.uflag) {
+      //   this.tab_active_id = 2
+      //   this.nav = this.nav.filter(item => item.id != 1)
+      // }
     },
     methods: {
       /**
@@ -108,10 +76,7 @@
     },
     components: {
       Basic: basic,
-      Backup: backup,
       Language: language,
-      Privacy: privacy_component,
-      Protocol: protocoll_component
     }
   }
 </script>
@@ -125,7 +90,7 @@
     display: flex;
     width: 100%;
     height: 100%;
-    padding: 25px 40px 29px;
+    padding: 25px 40px 25px;
     background-color: #F7F7F7;
 
     nav {

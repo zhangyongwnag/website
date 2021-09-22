@@ -168,7 +168,8 @@
       saveEditAvatar() {
         this.show = false
         this.$refs.cropper.getCropData( data => {
-          this.$emit('change', this.dataURLtoFile(data, parseInt(Math.random() * 1000000)))
+          // this.$emit('change', this.dataURLtoFile(data, parseInt(Math.random() * 1000000)))
+          this.$emit('change', data)
           //访问接口保存到数据库写这儿!
         })
       },
@@ -332,7 +333,7 @@
       height: 100%;
 
       img {
-        width: 108%;
+        width: 100%;
       }
     }
   }

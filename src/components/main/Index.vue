@@ -4,43 +4,31 @@
       <div style="height: 100%;min-width: 200px;opacity: 0;"
            :class="control ? '_flex_column_space_between aside_show' : '_flex_column_space_between aside_hide'">
         <div class="aside_content">
-          <div class="user_info _flex_item_center" v-if="user_info.uflag && user_info.user_id">
-            <el-popover
-                placement="bottom-start"
-                width="206"
-                transition="el-zoom-in-top"
-                popper-class="popper"
-                v-model="show"
-            >
-              <div class="popover">
-                <div class="popover_item _flex_item_center" @click="turn('setting')">
-                  <img src="../../assets/img/convert/user_setting.png" alt="">
-                  基本设置
-                </div>
-                <div class="popover_item _flex_item_center" @click="turn('quit')">
-                  <img src="../../assets/img/convert/user_quit.png" alt="">
-                  退出登录
-                </div>
-              </div>
-              <div slot="reference" class="user_avatar _flex_center">
-                <img v-if="user_info.user_headpic" :src="user_info.user_headpic" alt="">
-                <img v-else src="../../assets/img/avatar.png" alt="">
-              </div>
-            </el-popover>
-            <div class="user_name _ellipsis">{{user_info.user_name}}</div>
-          </div>
-          <div class="user_info _flex_item_center" @click="$store.dispatch('update_login_model_status', true)" v-else>
+          <div class="user_info _flex_item_center">
             <div class="user_avatar _flex_center">
-              <img src="../../assets/img/avatar.png" alt="">
+<!--              <img src="../../assets/img/avatar.png" alt="">-->
+              <img :src="user_info.user_headpic" alt="">
             </div>
-            <div class="user_name">未登录</div>
+            <div class="user_name">{{user_info.user_name}}</div>
           </div>
-          <nav>
-            <div v-for="(route,i) in routes_filter" class="nav_item" @click="handle_change(route,i)">
-              <img v-if="i == 0" src="../../assets/img/aside/index.png" :alt="route.children[0].meta.title" />
-              <img v-else-if="i == 1" src="../../assets/img/aside/convert.png" :alt="route.children[0].meta.title" />
-              <span
-                  :style="route.children[0].name == route_current.name ? {color:route.children[0].meta.active,textShadow:`0.5px 0px 1px ${route.children[0].meta.active}`} : ''">{{route.children[0].meta.title}}</span>
+          <nav @click="handle_change({path:'/index',children:[{name:'index'}]})">
+            <div class="item">性别：<span style="color: #333">女</span></div>
+            <div class="item">年龄：<span style="color: #333">20岁</span></div>
+            <div class="item">院校：<a target="_blank" href="http://www.whmc.edu.cn/" style="color: #333; text-decoration: none" class="_link">武汉传媒学院</a></div>
+            <div class="item">学历：<span style="color: red">本科</span></div>
+
+            <el-divider content-position="left">其他信息</el-divider>
+            <div class="item" style="align-items:flex-start;flex-direction: column;margin-top: 0">
+              现居地址：
+              <span style="color: #333;margin-top: 0.06667rem; font-size: 0.10667rem">湖北省武汉市江夏区藏龙岛凤凰大道2号</span>
+            </div>
+            <div class="item" style="align-items:flex-start;flex-direction: column">
+              我的邮箱：
+              <span style="color: #333; word-break: break-word;margin-top: 0.06667rem; font-size: 0.10667rem;" class="_link">1363944092@qq.com</span>
+            </div>
+            <div class="item" style="align-items:flex-start;flex-direction: column">
+              兴趣爱好：
+              <span style="color: #333; word-break: break-word;margin-top: 0.06667rem; font-size: 0.10667rem">古筝</span>
             </div>
           </nav>
         </div>
@@ -114,22 +102,6 @@
         this.$router.push({path: route.path})
       },
       /**
-       * @description 点击头像信息
-       * @param {String} type: 点击设置还是退出登录 'setting' or 'quit'
-       */
-      turn(type) {
-        this.show = false
-        if (type == 'setting') {
-          this.handle_change({path:'/setting',children:[{name:'setting'}]})
-        } else {
-          localStorage.removeItem('userInfo')
-          localStorage.removeItem('access_token')
-          // common.delCookie('access_token')
-          this.$store.commit('update_user_info', {})
-          this.$router.replace({path: '/index'})
-        }
-      },
-      /**
        * @description 更新当前路由信息
        * @param {Object} route: 路由信息
        */
@@ -149,6 +121,18 @@
 </script>
 
 <style lang="less" scoped>
+  /deep/ .el-divider__text, .el-link {
+    font-size: 16px;
+    color: #ccc;
+  }
+
+  /deep/ .el-divider__text.is-left{
+    left: 35px;
+  }
+
+  /deep/ .el-divider--horizontal {
+    margin: 100px 0 40px 0
+  }
   .popover {
     padding: 0 10px;
 
@@ -188,11 +172,12 @@
 
     .aside_content {
       width: 100%;
-      padding: 51px 0 0 40px;
+      /*padding: 51px 0 0 40px;*/
       transition: all .3s;
 
       .user_info {
         cursor: pointer;
+        padding: 51px 0 0 40px;
 
         .user_avatar {
           width: 54px;
@@ -203,7 +188,7 @@
           overflow: hidden;
 
           img {
-            width: 108%;
+            width: 100%;
           }
         }
 
@@ -216,17 +201,17 @@
       }
 
       nav {
-        margin-top: 60px;
+        margin-top: 40px;
 
-        .nav_item {
+        .item {
           margin-bottom: 28px;
           font-size: 18px;
           color: #838383;
           display: flex;
           align-items: center;
-          cursor: pointer;
-          white-space: nowrap;
           letter-spacing: 2px;
+          width: 240px;
+          padding: 0px 0 0 48px;
 
           img {
             margin-right: 16px;
@@ -240,7 +225,7 @@
       font-weight: 400;
       color: #838383;
       font-size: 15px;
-      padding: 0 0 36px 44px;
+      padding: 0 0 36px 48px;
       display: flex;
       align-items: center;
       cursor: pointer;
