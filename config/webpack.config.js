@@ -66,7 +66,7 @@ if (development) {
     new HtmlWebpackPlugin({
       title: '个人网站',
       inject: true,
-      filename: 'speedwork.html',
+      filename: 'index.html',
       template: path.resolve(__dirname, '../index.html'),
       minify: {
         removeComments: true, // 删除空格换行

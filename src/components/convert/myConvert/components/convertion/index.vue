@@ -1,56 +1,35 @@
 <template>
-  <section class="_flex_column_space_between">
-    <header class="_flex_between_center" v-if="vip_info.is_vip == 2">
-      <h1>您目前还不是VIP</h1>
-      <SpeedButton @confirm="turn_to_vip" class="become_vip">升级至<span style="font-weight: bold">VIP</span></SpeedButton>
-    </header>
-    <header class="_flex_between_center" v-else-if="vip_info.is_vip == 1">
-      <div class="_flex_column_align_start">
-        <h1>转换次数 : <span style="color: #1165D6">{{vip_info.convert_number}}</span></h1>
-        <span>效期至 : <span style="color: #1165D6">{{vip_info.expire_time}}</span></span>
-      </div>
-      <SpeedButton @confirm="turn_to_vip" text="VIP续费" class="renew"/>
-    </header>
-    <header v-else></header>
+  <div class="_flex_column_space_between">
+<!--    <header class="_flex_between_center" v-if="vip_info.is_vip == 2">-->
+<!--      <h1>您目前还不是VIP</h1>-->
+<!--      <SpeedButton @confirm="turn_to_vip" class="become_vip">升级至<span style="font-weight: bold">VIP</span></SpeedButton>-->
+<!--    </header>-->
+<!--    <header class="_flex_between_center" v-else-if="vip_info.is_vip == 1">-->
+<!--      <div class="_flex_column_align_start">-->
+<!--        <h1>转换次数 : <span style="color: #1165D6">{{vip_info.convert_number}}</span></h1>-->
+<!--        <span>效期至 : <span style="color: #1165D6">{{vip_info.expire_time}}</span></span>-->
+<!--      </div>-->
+<!--      <SpeedButton @confirm="turn_to_vip" text="VIP续费" class="renew"/>-->
+<!--    </header>-->
+<!--    <header v-else></header>-->
     <article>
       <el-table
           v-loading="loading"
-          :data="convert_list"
+          :data="list"
           ref="multipleTable"
           @row-click=""
           @select=""
           @select-all=""
-          height="100%"
-          max-height="calc(100% - 80px)"
+          height="500px"
           style="width: 98%;margin-left: 10px">
 <!--        <el-table-column type="selection" width="70"></el-table-column>-->
-        <el-table-column label="文档名称" show-overflow-tooltip>
+        <el-table-column label="荣誉名称" show-overflow-tooltip>
           <template slot-scope="scope">
-            <div style="text-align: left;padding-left: 20px" class="_ellipsis">{{scope.row.filename}}</div>
+            <div style="text-align: center;padding-left: 20px" class="_ellipsis">{{scope.row.name}}</div>
           </template>
         </el-table-column>
-        <el-table-column prop="file_convert_way" label="方式"></el-table-column>
-        <el-table-column label="状态">
-          <template slot-scope="scope">
-            <span v-if="scope.row.status_message === '转换成功'" style="color: forestgreen">{{scope.row.status_message}}</span>
-            <span v-else-if="scope.row.status_message === '正在进行'">{{scope.row.status_message}}</span>
-            <span v-else style="color: red">{{scope.row.status_message}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="到期时间">
-          <template slot-scope="scope">{{!scope.row.is_expire ? scope.row.expire_time : '已过期'}}</template>
-        </el-table-column>
-        <el-table-column>
-          <template slot="header" slot-scope="scope">
-            下载
-<!--            <SpeedButton :disabled="!choice_data.size" @confirm="download_multiple" text="批量下载" style="font-weight: normal; line-height: 15px; padding:7px 17px" />-->
-          </template>
-          <template slot-scope="scope">
-            <div class="_flex_center" style="width: 100%; height: 40px;" @click.stop="download(scope.row, scope.$index)">
-              <img v-if="!scope.row.is_expire" src='../../../../../assets/img/order/download.svg' alt="">
-              <img v-else src='../../../../../assets/img/order/download_is_expire.svg' alt="">
-            </div>
-          </template>
+        <el-table-column label="获得时间">
+          <template slot-scope="scope">{{scope.row.time}}</template>
         </el-table-column>
         <template slot='empty'>
           <div class="_common_empty">
@@ -62,7 +41,7 @@
       <!--分页加载-->
       <SpeedPagination :total="total" :size="page_size" @handle-current="handle_current"/>
     </article>
-  </section>
+  </div>
 </template>
 
 <script>
@@ -78,90 +57,54 @@
         total: 0, // 数据总数量
         current_page: 1, // 当前的页码
         page_size: 10, // 每页的数量
+        loading: false
       }
     },
-    computed: {
-      ...mapState({
-        loading: state => state.myConvert.loading, // Loading 加载
-        vip_info: state => state.myConvert.vip_info, // VIP信息
-        convert_list: state => state.myConvert.convert_list, // 转换列表
-      })
-    },
-    created() {
-      // 获取VIP信息
-      this.$store.dispatch('get_vip_info')
-      // 根据是否有缓存数据设置Loading，
-      this.$store.dispatch('update_lading', Boolean(!this.convert_list.length))
-      // 获取购买记录
-      this.$store.dispatch('get_convert_list', { current_page: this.current_page, page_size: this.page_size })
-        .then(res => {
-          this.total = res.count
-        })
+    mounted() {
+      this.list = [
+        {
+          id: 1,
+          name: '湖北省翻译大赛二等奖',
+          time: '2018 02-12 12:12',
+        },
+        {
+          id: 2,
+          name: '入围英语词汇大赛初赛',
+          time: '2019 11-01 20:59',
+        },
+        {
+          id: 3,
+          name: '全国语文文字能力大赛优秀奖',
+          time: '2019 06-05 19:11',
+        },
+        {
+          id: 4,
+          name: '武汉传媒学院读书月“最美读书瞬间”摄影比赛入围',
+          time: '2020 11-02 10:31',
+        },
+        {
+          id: 5,
+          name: '获得武汉传媒学院“最美笔记”奖',
+          time: '2020 02-24 12:01',
+        },
+        {
+          id: 6,
+          name: '通过了“武汉传媒学院风向标创业训练营”的课程和考核，考核良好',
+          time: '2021 12-02 15:22',
+        },
+        {
+          id: 7,
+          name: '曾任校学生会学习部干事和院学生会监察部干事',
+          time: '2021 05-04 11:02',
+        },
+        {
+          id: 8,
+          name: '曾任华媒青年报社团人事部部长',
+          time: '2021 02-12 08:22',
+        },
+      ]
     },
     methods: {
-      ...mapActions(['turn_to_vip']),
-      /**
-       * @description 批量下载
-       */
-      download_multiple() {
-        let failure = []; // 失效文件
-        // 过滤已选择数据
-        let list = this.convert_list.filter(item => {
-          this.choice_data.has(item.id) && (!item.converturl) ? failure.push(item.id) : ''
-          return this.choice_data.has(item.id) && item.converturl && !item.is_expire
-        })
-        // 如果文件全部失效
-        if (!list.length) {
-          this.$notify({
-            title:'提示',
-            message:'所选文件均为失效文件，请重新选择',
-            type:'info',
-            showClose:true,
-          })
-          this.choice_data = new Set([])
-          this._set_choice_data()
-          return
-        }
-        // 如果文件部分失效
-        if (failure.length) {
-          this.$notify({
-            title:'提示',
-            message:`检测到所选文件包含${failure.length}个失效文件，已为您过滤下载`,
-            type:'info',
-            showClose:true,
-          })
-          failure.map(item => this.choice_data.delete(item))
-          this._set_choice_data()
-        }
-        // 下载有效文件
-        let index_ = 0
-        this.download(list[index_], index_)
-        let time_int = setInterval(() => {
-          index_ ++
-          this.download(list[index_], index_)
-          if (list.length - 1 === index_) {
-            clearInterval(time_int)
-          }
-        }, 1000)
-      },
-      /**
-       * @description 下载单条数据
-       * @param {Object} item: 当前选中项
-       * @param {Number} index: 选中项下标index
-       */
-      download(item, index) {
-        if (!item.converturl) {
-          this.$message.info(`文件未转换成功，无法下载`)
-          return;
-        }
-        if (item.is_expire) {
-          this.$message.info(`文件已过期，无法下载`)
-          return
-        }
-        var oA = document.createElement('a')
-        oA.href = item.converturl
-        oA.click()
-      },
       // 点击复选框
       handle_select(selection, row) {
         this.handle_click(row)
@@ -214,10 +157,11 @@
     padding-left: 18px;
   }
 
-  section {
+  ._flex_column_space_between {
+    margin-top: 24px;
     width: 100%;
-    height: 100%;
-    margin-left: 20px;
+    animation: fade-bottom .5s 0s;
+    padding-bottom: 50px;
 
     header {
       width: 100%;
@@ -257,7 +201,6 @@
 
     article {
       width: 100%;
-      height: calc(100vh - 252px);
       background: #FFFFFF;
       box-shadow: 0px 2px 8px 1px rgba(0, 0, 0, 0.1);
       border-radius: 20px;
@@ -271,7 +214,6 @@
         color: #000;
         margin-bottom: 20px;
       }
-
     }
   }
 </style>

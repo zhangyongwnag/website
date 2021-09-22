@@ -5,7 +5,7 @@
       <div v-if="!tab.hidden" :ref="`tab${index}`" class="nav_item _flex_center" v-for="(tab,index) in tabs"
            @click="handle_change(tab,index)">{{tab.name}}
       </div>
-      <div v-if="convert_header_active_index < 3" class="nav_active_line" :style="{left: tab_translate}"
+      <div v-if="convert_header_active_index < 4" class="nav_active_line" :style="{left: tab_translate}"
            ref="line"></div>
     </nav>
     <!--搜索框、会员中心按钮-->
@@ -79,11 +79,16 @@
           },
           {
             id: 7,
+            name: '申请合作',
+            component_name: 'work',
+          },
+          {
+            id: 8,
             name: '留言板',
             component_name: 'message',
           },
           {
-            id: 8,
+            id: 9,
             name: '转换详细页面',
             component_name: 'index',
             hidden: true

@@ -1,95 +1,66 @@
 <template>
-  <div class="container">
-    <header class="_flex_between_center">
-      <div class="_flex_item_center">
-        <img src="../../../assets/img/position.png" alt="">
-        位置：湖北省 武汉市
+    <el-scrollbar class="container" :native="false" wrapStyle="overflow-x: hidden;" wrapClass="" viewClass="" viewStyle=""
+                  :noresize="false" tag="section">
+
+      <header class="_flex_between_center">
+        <div class="_flex_item_center">
+          <img src="../../../assets/img/position.png" alt="">
+          位置：湖北省 武汉市
+        </div>
+        <div class="date">出生日期：2021.12.12</div>
+      </header>
+      <section class="_flex_column_center">
+        <div class="user_avatar _flex_center">
+          <img :src="user_info.user_headpic" alt="">
+        </div>
+        <h1 class="_flex_center">
+          {{user_info.user_name}}
+          <img src="../../../assets/img/gril.png" alt="">
+        </h1>
+        <div class="description">
+          1363944092@qq.com<span>|</span>武汉传媒学院
+        </div>
+        <div class="tabs">
+          <div class="tab" v-for="(item, index) in tabs">{{item }}</div>
+        </div>
+      </section>
+      <nav>
+        <el-tabs v-model="label">
+          <el-tab-pane label="个人信息" name="first"></el-tab-pane>
+          <el-tab-pane label="个人简介" name="second"></el-tab-pane>
+          <el-tab-pane label="技能特长" name="third"></el-tab-pane>
+          <el-tab-pane label="兴趣爱好" name="fourth"></el-tab-pane>
+          <el-tab-pane label="个人荣誉" name="five"></el-tab-pane>
+          <el-tab-pane label="个人作品" name="six"></el-tab-pane>
+        </el-tabs>
+      </nav>
+      <div class="tab_content_wrap">
+        <div class="tab_content">
+          <Info v-if="label === 'first'" />
+          <Description v-else-if="label === 'second'" />
+          <Art v-else-if="label === 'third'" />
+          <Interest v-else-if="label === 'fourth'" />
+          <Convertion v-else-if="label === 'five'" />
+          <Example v-else-if="label === 'six'" />
+        </div>
       </div>
-      <div class="date">出生日期：2021.12.12</div>
-    </header>
-    <section class="_flex_column_center">
-      <div class="user_avatar _flex_center">
-        <img :src="user_info.user_headpic" alt="">
-      </div>
-      <h1 class="_flex_center">
-        {{user_info.user_name}}
-        <img src="../../../assets/img/gril.png" alt="">
-      </h1>
-      <div class="description">
-        1363944092@qq.com<span>|</span>武汉传媒学院
-      </div>
-      <div class="tabs">
-        <div class="tab" v-for="(item, index) in tabs">{{item }}</div>
-      </div>
-    </section>
-    <nav>
-      <el-tabs v-model="label">
-        <el-tab-pane label="个人信息" name="first"></el-tab-pane>
-        <el-tab-pane label="个人简介" name="second"></el-tab-pane>
-        <el-tab-pane label="技能特长" name="third"></el-tab-pane>
-        <el-tab-pane label="兴趣爱好" name="fourth"></el-tab-pane>
-        <el-tab-pane label="个人荣誉" name="five"></el-tab-pane>
-        <el-tab-pane label="个人作品" name="six"></el-tab-pane>
-      </el-tabs>
-    </nav>
-    <div class="tab_content">
-      123
-    </div>
-  </div>
+    </el-scrollbar>
 </template>
 
 <script>
   import {mapState} from 'vuex'
+  import info from "../person/info";
+  import description from "../person/description";
+  import art from "../person/art";
+  import interest from "../person/interest";
+  import convertion from '../myConvert/components/convertion/index'
+  import example from "../person/example";
 
   export default {
     data() {
       return {
-        nav: [
-          // {
-          //   label: '分销加盟',
-          //   id: 1,
-          //   component_name: 'join',
-          //   url: join,
-          //   url_select: join_select
-          // },
-          {
-            label: '基本信息',
-            id: 2,
-            component_name: 'vip',
-            url_select: 'el-icon-s-custom'
-          },
-          {
-            label: '技能特长',
-            id: 3,
-            component_name: 'record',
-            url_select: 'el-icon-s-custom'
-          },
-          // {
-          //   label: '多人共享',
-          //   id: 4,
-          //   component_name: 'group',
-          //   url: group,
-          //   url_select: group_select
-          // },
-          {
-            label: '个人荣誉',
-            id: 5,
-            component_name: 'convertion',
-            url_select: 'el-icon-s-custom'
-          },
-        ],
-        component_name: '', // 动态组件
         tabs: ['夜猫子', '逛街达人', '选择恐惧症', '古筝狂魔', '逗比控'],
         label: 'first'
-      }
-    },
-    watch: {
-      // 监听选中的tab信息，根据tab信息动态引入组件
-      tab_active_info: {
-        handler(v) {
-          this.component_name = () => import(`./components/${v.component_name}/index`)
-        },
-        immediate: false
       }
     },
     computed: {
@@ -97,20 +68,15 @@
         user_info: state => state.login.user_info
       }),
     },
-    created() {
-      this.$store.dispatch('update_active_tab_info', this.nav[0])
-    },
-    methods: {
-      /**
-       * @description 切换菜单
-       * @param {Object} nav: 菜单信息
-       * @param {Number} index: 下标
-       */
-      handle_change(nav, index) {
-        this.$store.dispatch('update_active_tab_info', nav)
-      }
-    },
-    components: {}
+    methods: {},
+    components: {
+      Info: info,
+      Description: description,
+      Art: art,
+      Interest: interest,
+      Convertion: convertion,
+      Example: example
+    }
   }
 </script>
 
@@ -162,9 +128,10 @@
     padding: 0;
     height: calc(100% - 58px);
   }
+
   .container {
     width: 100%;
-    height: 100%;
+    height: calc(100% - 78px);
     animation: fade-bottom .5s 0s;
 
     header {
@@ -243,7 +210,7 @@
           text-align: center;
           line-height: 20px;
           /*box-shadow: 0 0 10px 2px #eee*/
-          box-shadow: 0 0 10px 1px rgba(0,0,0,0.1);
+          box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.1);
           cursor: pointer;
           animation: tab_show 1s .3s forwards;
           transition: all .3s;
@@ -260,6 +227,15 @@
       margin-top: -50px;
       opacity: 0;
       animation: section_show 1s 1s forwards;
+    }
+
+    .tab_content_wrap {
+      display: flex;
+      justify-content: center;
+
+      .tab_content {
+        width: 1050px;
+      }
     }
   }
 

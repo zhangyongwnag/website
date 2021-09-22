@@ -3,17 +3,35 @@
     <article>
       <!--申请加盟前-->
       <el-form label-position="top" label-width="80px" :model="form" style="width: 45%">
-        <el-form-item label="留言内容">
-          <el-input
-              style="margin-top: 10px"
-              type="textarea"
-              :rows="10"
-              placeholder="请输入留言内容"
-              v-model="form.company">
-          </el-input>
+        <el-form-item label="申请类型">
+          <el-checkbox-group v-model="form.apply_type" :max="1" class="_flex_item_center">
+            <el-checkbox label="1" key="1">公司</el-checkbox>
+            <el-checkbox label="2" key="2">个人</el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
+        <el-form-item label="公司名称" style="margin-top: -10px">
+          <el-input v-model.trim="form.company" maxLength="20" placeholder="请输入公司名称" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="联系电话">
+          <el-input type="phone" v-model.trim="form.phone" maxLength="11" placeholder="请输入联系电话" clearable></el-input>
+          <div style="margin-top: 12px" class="_flex_item_center">
+            <SpeedButton :type="code_time > 0 ? 'cancel': 'confirm'" style="width: 200px;;padding: 0"
+                         :disabled="code_time > 0" @confirm="send">{{code_time > 0 ? `重新发送 ( ${code_time} )`
+              : '发送验证码'}}
+            </SpeedButton>
+            <el-input type="text" v-model.trim="form.verification" maxLength="4" placeholder="验证码"
+                      style="margin-left: 10px">
+              <i v-if="code_status" slot="suffix" class="code_status_icon"
+                 :class="code_status == 1 ? 'el-icon-success' : 'el-icon-error'"
+                 :style="code_status ? (code_status == 1 ? {color: 'forestgreen'} : {color:'orangered'}) : ''"></i>
+            </el-input>
+          </div>
+        </el-form-item>
+        <el-form-item label="请联系我">
+          <img class="qr_code" src="../../../assets/img/qrcode.png" alt="">
         </el-form-item>
         <el-form-item label="">
-          <SpeedButton type="confirm" style="width: 120px;;padding: 0;border-radius: 4px" @confirm="send">提交申请</SpeedButton>
+          <SpeedButton type="confirm" style="width: 120px;;padding: 0;border-radius: 4px" @confirm="submit">提交申请</SpeedButton>
         </el-form-item>
       </el-form>
     </article>
@@ -57,22 +75,18 @@
     methods: {
       // 发送验证码
       send() {
-        if (!this.form.company) {
-          this.$notify({
-            title:'提示',
-            message:'请输入留言内容',
-            type:'error',
-            showClose:true,
-          })
+        if (!common.isPhone(this.form.phone)) {
+          this.$message.error(`请输入正确的手机号`)
           return
         }
-        this.$notify({
-          title:'提示',
-          message:'留言提交成功',
-          type:'success',
-          showClose:true,
-        })
-        this.form.company = ''
+        this.code_status = 0
+        this.code_time = 59
+        let time_out = setInterval(() => {
+          this.code_time--
+          if (this.code_time == 0) {
+            clearInterval(time_out)
+          }
+        }, 1000)
       },
       // 验证码是否正确
       verify() {
@@ -80,7 +94,12 @@
       },
       // 提交
       submit() {
-
+        this.$notify({
+          title:'提示',
+          message:'请输入申请内容',
+          type:'error',
+          showClose:true,
+        })
       },
     },
     components: {
